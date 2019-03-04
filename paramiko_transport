@@ -1,0 +1,28 @@
+#!/usr/bin/python3
+
+import paramiko    #导入paramiko的库 用于创建一个ssh seesion的对象
+
+基于用户名和密码的 transport 方式登录 
+传统的连接服务器、执行命令、关闭的一个操作我试了几次没成功，老是报一个open_seesion超时的错误。并且有时候需要登录上服务器执行多个操作，
+比如执行命令、上传/下载文件，方法1则无法实现，可以通过如下方式建
+
+
+transport = paramiko.Transport('192.168.1.103')    #创建一个连接到192.168.1.103的实例对象  
+transport.connect('username=root',password='cw123654')   #建立连接
+
+
+ssh = paramiko.SSHClient()    #建立一个连接对象
+ssh._transport = transport       # 将sshclient的对象的transport（这个是默认的）定为以上的transport（这个是我们指定的）
+
+stdin, stdout, stderr = ssh.exec_command('df -hl') # 执行命令，和传统方法一样
+print(stdout.read().decode())
+
+# 关闭连接
+transport.close()
+
+
+其他参数
+
+client.set_missing_host_key_policy(paramiko.AutoAddPolicy())  #自动添加策略，保存服务器的主机名和密钥信息
+
+private_key = paramiko.RSAKey.from_private_key_file('/home/auto/.ssh/id_rsa')    # 指定使用ssh免密登入的私钥
