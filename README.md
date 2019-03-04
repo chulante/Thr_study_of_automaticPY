@@ -1,0 +1,2 @@
+# Thr_study_of_automaticPY
+automatic_study
